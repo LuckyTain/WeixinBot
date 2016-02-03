@@ -1,7 +1,9 @@
 # 这个 fork 只是添加了一个群发功能，这个功能会在每条群发消息前面加上发送对象的名称
 
 使用流程是
+
 1. 正常启动
+
 2. 输入：all->[群发内容]，回车
 
 
@@ -13,9 +15,13 @@ all->新年快乐
 output:
 
 老王，新年快乐
+
 小王，新年快乐
+
 王老板，新年快乐
+
 人生如梦，新年快乐
+
 ……
 
 
@@ -23,7 +29,7 @@ output:
 注2：发送消息接口一般会对大量同时调用有监测防止被刷，所以每发送一次后停3秒，相当于你在手动操作微信网页版，只不过是自动化了
 注3：Python大法好
 
-==========================original readme==============================
+# ==========================original readme==============================
 
 
 # WeixinBot [![star this repo](http://github-svg-buttons.herokuapp.com/star.svg?user=Urinx&repo=WeixinBot&style=flat&background=1081C1)](http://github.com/Urinx/WeixinBot) [![fork this repo](http://github-svg-buttons.herokuapp.com/fork.svg?user=Urinx&repo=WeixinBot&style=flat&background=1081C1)](http://github.com/Urinx/WeixinBot/fork) ![python](https://img.shields.io/badge/python-2.7-ff69b4.svg)

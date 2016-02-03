@@ -150,7 +150,7 @@ class WebWeixin(object):
 		url = self.base_uri + '/webwxgetcontact?pass_ticket=%s&skey=%s&r=%s' % (self.pass_ticket, self.skey, int(time.time()))
 		dic = self._post(url, {})
 		self.MemberList = dic['MemberList']
-		
+
 		ContactList = self.MemberList[:]
 		SpecialUsers = ['newsapp', 'fmessage', 'filehelper', 'weibo', 'qqmail', 'fmessage', 'tmessage', 'qmessage', 'qqsync', 'floatbottle', 'lbsapp', 'shakeapp', 'medianote', 'qqfriend', 'readerapp', 'blogapp', 'facebookapp', 'masssendapp', 'meishiapp', 'feedsapp', 'voip', 'blogappweixin', 'weixin', 'brandsessionholder', 'weixinreminder', 'wxid_novlwrv3lqwv11', 'gh_22b87fa7cb3c', 'officialaccounts', 'notification_messages', 'wxid_novlwrv3lqwv11', 'gh_22b87fa7cb3c', 'wxitil', 'userexperience_alarm', 'notification_messages']
 		for i in xrange(len(ContactList) - 1, -1, -1):
@@ -322,6 +322,19 @@ class WebWeixin(object):
 				elif selector == '0':
 					time.sleep(1)
 
+	def sendAll(self, msg):
+		for contact in self.ContactList:
+			name = contact['RemarkName'] if contact['RemarkName'] else contact['NickName']
+			userID = contact['UserName']
+			message = self._transcoding(msg)
+			greeting = name + u', ' + message
+			if self.webwxsendmsg(greeting, userID):
+				print greeting + u' => 发送成功'
+			else:
+				print greeting + u' => 发送失败'
+			time.sleep(3)
+
+
 	def sendMsg(self, name, word, isfile = False):
 		id = self.getUSerID(name)
 		if id:
@@ -357,12 +370,12 @@ class WebWeixin(object):
 		print '[*] 共有 %d 位联系人' % len(self.ContactList)
 		if self.DEBUG: print self
 
-		if raw_input('[*] 是否开启自动回复模式(y/n): ') == 'y':
-			self.autoReplyMode = True
-			print '[*] 自动回复模式 ... 开启'
-		else:
-			print '[*] 自动回复模式 ... 关闭'
-		
+		# if raw_input('[*] 是否开启自动回复模式(y/n): ') == 'y':
+		# 	self.autoReplyMode = True
+		# 	print '[*] 自动回复模式 ... 开启'
+		# else:
+		print '[*] 自动回复模式 ... 关闭'
+
 		listenProcess = multiprocessing.Process(target=self.listenMsgMode)
 		listenProcess.start()
 
@@ -371,6 +384,8 @@ class WebWeixin(object):
 			if text == 'quit':
 				listenProcess.terminate()
 				exit('[*] 退出微信')
+			elif text[:5] == 'all->':
+				self.sendAll(text[5:])
 			elif text[:2] == '->':
 				[name, word] = text[2:].split(':')
 				self.sendMsg(name, word)

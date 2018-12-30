@@ -322,7 +322,8 @@ class WebWeixin(object):
 				elif selector == '0':
 					time.sleep(1)
 
-# TODO:   使用随机祝福语  这里不考虑nickname长度不为2/3的人，我联系人里大多数都有备注  输出的信息需要修改
+# TODO:   使用随机祝福语  输出的信息需要修改
+	#  这里不考虑nickname长度不为2/3的人，我联系人里大多数都有备注
 	def sendAll(self, msg):
 		for contact in self.ContactList:
 			name = contact['RemarkName'] if contact['RemarkName'] else contact['NickName']
@@ -335,7 +336,7 @@ class WebWeixin(object):
 				mingzi = name[1:]
 				greeting = mingzi + u', ' + message
 				if self.webwxsendmsg(greeting, userID):
-					print name + '/消息为' + greeting + u' => 三字名发送成功'
+					print name + u'/消息为' + greeting + u' => 三字名发送成功'
 				else:
 					print greeting + u' => 三字名发送失败'
 				time.sleep(5) #修改为发送后等待5s
@@ -343,7 +344,7 @@ class WebWeixin(object):
 			elif len(name) == 2:
 				greeting = name + u', ' + message
 				if self.webwxsendmsg(greeting, userID):
-					print name + greeting +u' => 二字名发送成功'
+					print name + u'/消息为'+ greeting +u' => 二字名发送成功'
 				else:
 					print greeting + u' => 二字名发送失败'
 				time.sleep(5)  # 修改为发送后等待5s
@@ -424,8 +425,8 @@ class WebWeixin(object):
 
 	def _printQR(self, mat):
 		for i in mat:
-			BLACK = '\033[40m  \033[0m'
-			WHITE = '\033[47m  \033[0m'
+			BLACK = '\033[40m  	\033[0m'
+			WHITE = '\033[47m  	\033[0m'
 			print ''.join([BLACK if j else WHITE for j in i])
 
 	def _str2qr(self, str):

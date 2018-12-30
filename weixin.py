@@ -49,7 +49,7 @@ class WebWeixin(object):
 		self.MemberList = []
 		self.ContactList = []
 		self.GroupList = []
-		self.autoReplyMode = False
+		self.autoReplyMode = True
 
 		opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookielib.CookieJar()))
 		urllib2.install_opener(opener)
@@ -322,18 +322,34 @@ class WebWeixin(object):
 				elif selector == '0':
 					time.sleep(1)
 
+# TODO:   使用随机祝福语  这里不考虑nickname长度为3的人，我联系人里大多数都有备注  输出的信息需要修改
 	def sendAll(self, msg):
 		for contact in self.ContactList:
 			name = contact['RemarkName'] if contact['RemarkName'] else contact['NickName']
 			userID = contact['UserName']
-			message = self._transcoding(msg)
-			greeting = name + u', ' + message
-			if self.webwxsendmsg(greeting, userID):
-				print greeting + u' => 发送成功'
+			message = self._transcoding(msg) #这里要改成随机祝福语
+			greeting = name
+			# print 'name的长度为' + str(len(name))
+			# 去掉名字中的姓 只支持三字名 二字名直接发全名算了，四字名不管了
+			if len(name) == 3:
+				mingzi = name[1:]
+				greeting = mingzi + u', ' + message
+				if self.webwxsendmsg(greeting, userID):
+					print greeting + message+ u' => 三字名发送成功'
+				else:
+					print greeting + u' => 三字名发送失败'
+				time.sleep(5) #修改为发送后等待5s
+			#二字名不做处理
+			elif len(name) == 2:
+				greeting = name + u', ' + message
+				if self.webwxsendmsg(greeting, userID):
+					print greeting + message +u' => 二字名发送成功'
+				else:
+					print greeting + u' => 二字名发送失败'
+				time.sleep(5)  # 修改为发送后等待5s
 			else:
-				print greeting + u' => 发送失败'
-			time.sleep(3)
-
+				print greeting +u' => 因名字长度发送失败'
+				time.sleep(5)  # 修改为发送后等待5s
 
 	def sendMsg(self, name, word, isfile = False):
 		id = self.getUSerID(name)

@@ -328,7 +328,7 @@ class WebWeixin(object):
 		contactsum = len(self.ContactList)
 		for contact in self.ContactList:
 			i = i+1
-			if i>contactsum :	#Bug预定
+			if i>contactsum :
 				break
 			name = contact['RemarkName'] if contact['RemarkName'] else contact['NickName']
 			userID = contact['UserName']
@@ -357,23 +357,23 @@ class WebWeixin(object):
 			if len(name) == 3:
 				mingzi = name[1:]
 				# greeting = mingzi + u', ' + message
-				greeting = message + mingzi
+				greeting = message + mingzi + self._transcoding('(疯狂暗示')
 				if self.webwxsendmsg(greeting, userID):
-					print i + name + u'/消息为' + greeting + u' => 三字名发送成功'
+					print str(i) + name + u'/消息为' + greeting + u' => 三字名发送成功'
 				else:
-					print i + greeting + u' => 三字名发送失败'
+					print str(i) + greeting + u' => 三字名发送失败'
 				time.sleep(5) #修改为发送后等待5s
 			#二字名不做处理
 			elif len(name) == 2:
 				# greeting = name + u', ' + message
-				greeting = message + mingzi
+				greeting = message + name + self._transcoding('(疯狂暗示')
 				if self.webwxsendmsg(greeting, userID):
-					print i + name + u'/消息为'+ greeting +u' => 二字名发送成功'
+					print str(i) + name + u'/消息为'+ greeting +u' => 二字名发送成功'
 				else:
-					print i + greeting + u' => 二字名发送失败'
+					print str(i) + greeting + u' => 二字名发送失败'
 				time.sleep(5)  # 修改为发送后等待5s
 			else:
-				print i + name + u'/消息为' + greeting +u' => 因名字长度发送失败'
+				print str(i) + name + u'/消息为' + greeting +u' => 因名字长度发送失败'
 				time.sleep(5)  # 修改为发送后等待5s
 
 	def sendMsg(self, name, word, isfile = False):
